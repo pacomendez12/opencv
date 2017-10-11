@@ -70,6 +70,36 @@ int main( int argc, const char** argv )
         help();
         return -1;
     }
+
+	/*
+#include <iostream>
+
+	std::string numberfile;
+	cout << "which file you want to open..." << endl;
+	std::cin >> numberfile;
+	inputName += numberfile + ".jpg";*/
+
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video1.mp4";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video2.mp4";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video3.mp4";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img1.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img2.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img3.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img4.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img5.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img6.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img7.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img8.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img9.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img10.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img11.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img12.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img13.jpg";
+	inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img14.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img15.jpg";
+
+
+
     if( inputName.empty() || (isdigit(inputName[0]) && inputName.size() == 1) )
     {
         int camera = inputName.empty() ? 0 : inputName[0] - '0';
@@ -179,12 +209,12 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
 
     t = (double)getTickCount();
     cascade.detectMultiScale( smallImg, faces,
-        1.1, 2, 0
+        1.1, 15, 0
         //|CASCADE_FIND_BIGGEST_OBJECT
         //|CASCADE_DO_ROUGH_SEARCH
         |CASCADE_SCALE_IMAGE,
         Size(30, 30) );
-    if( tryflip )
+    /*if( tryflip )
     {
         flip(smallImg, smallImg, 1);
         cascade.detectMultiScale( smallImg, faces2,
@@ -197,7 +227,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
         {
             faces.push_back(Rect(smallImg.cols - r->x - r->width, r->y, r->width, r->height));
         }
-    }
+    }*/
     t = (double)getTickCount() - t;
     printf( "detection time = %g ms\n", t*1000/getTickFrequency());
     for ( size_t i = 0; i < faces.size(); i++ )
@@ -209,7 +239,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
         Scalar color = colors[i%8];
         int radius;
 
-        double aspect_ratio = (double)r.width/r.height;
+        /*double aspect_ratio = (double)r.width/r.height;
         if( 0.75 < aspect_ratio && aspect_ratio < 1.3 )
         {
             center.x = cvRound((r.x + r.width*0.5)*scale);
@@ -217,7 +247,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
             radius = cvRound((r.width + r.height)*0.25*scale);
             circle( img, center, radius, color, 3, 8, 0 );
         }
-        else
+        else*/
             rectangle( img, cvPoint(cvRound(r.x*scale), cvRound(r.y*scale)),
                        cvPoint(cvRound((r.x + r.width-1)*scale), cvRound((r.y + r.height-1)*scale)),
                        color, 3, 8, 0);
