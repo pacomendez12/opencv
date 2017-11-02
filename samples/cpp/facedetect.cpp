@@ -62,8 +62,8 @@ int main( int argc, const char** argv )
         parser.printErrors();
         return 0;
     }
-    if ( !nestedCascade.load( nestedCascadeName ) )
-        cerr << "WARNING: Could not load classifier cascade for nested objects" << endl;
+    //if ( !nestedCascade.load( nestedCascadeName ) )
+        //cerr << "WARNING: Could not load classifier cascade for nested objects" << endl;
     if( !cascade.load( cascadeName ) )
     {
         cerr << "ERROR: Could not load classifier cascade" << endl;
@@ -71,10 +71,10 @@ int main( int argc, const char** argv )
         return -1;
     }
 
-	/*
+	
 #include <iostream>
 
-	std::string numberfile;
+	/*std::string numberfile;
 	cout << "which file you want to open..." << endl;
 	std::cin >> numberfile;
 	inputName += numberfile + ".jpg";*/
@@ -82,6 +82,9 @@ int main( int argc, const char** argv )
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video1.mp4";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video2.mp4";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video3.mp4";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video4.mp4";
+	inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video5.mp4";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img0.pgm";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img1.jpg";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img2.jpg";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img3.jpg";
@@ -90,12 +93,12 @@ int main( int argc, const char** argv )
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img6.jpg";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img7.jpg";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img8.jpg";
-	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img9.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img9.jpg";// falla
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img10.jpg";
-	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img11.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img11.jpg"; // falla
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img12.jpg";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img13.jpg";
-	inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img14.jpg";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img14.jpg"; //falla
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img15.jpg";
 
 
@@ -191,14 +194,14 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
     vector<Rect> faces, faces2;
     const static Scalar colors[] =
     {
-        Scalar(255,0,0),
+        /*Scalar(255,0,0),
         Scalar(255,128,0),
-        Scalar(255,255,0),
+        Scalar(255,255,0),*/
         Scalar(0,255,0),
-        Scalar(0,128,255),
+        /*Scalar(0,128,255),
         Scalar(0,255,255),
         Scalar(0,0,255),
-        Scalar(255,0,255)
+        Scalar(255,0,255)*/
     };
     Mat gray, smallImg;
 
@@ -209,7 +212,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
 
     t = (double)getTickCount();
     cascade.detectMultiScale( smallImg, faces,
-        1.1, 15, 0
+        1.1,3, 0
         //|CASCADE_FIND_BIGGEST_OBJECT
         //|CASCADE_DO_ROUGH_SEARCH
         |CASCADE_SCALE_IMAGE,
@@ -229,14 +232,14 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
         }
     }*/
     t = (double)getTickCount() - t;
-    printf( "detection time = %g ms\n", t*1000/getTickFrequency());
+    printf( "detection time = %g ms, detected %zd objects\n", t*1000/getTickFrequency(), faces.size());
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
         Mat smallImgROI;
         vector<Rect> nestedObjects;
         Point center;
-        Scalar color = colors[i%8];
+        Scalar color = colors[i%sizeof(colors) / sizeof(colors[0])];
         int radius;
 
         /*double aspect_ratio = (double)r.width/r.height;
@@ -254,7 +257,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
         if( nestedCascade.empty() )
             continue;
         smallImgROI = smallImg( r );
-        nestedCascade.detectMultiScale( smallImgROI, nestedObjects,
+        /*nestedCascade.detectMultiScale( smallImgROI, nestedObjects,
             1.1, 2, 0
             //|CASCADE_FIND_BIGGEST_OBJECT
             //|CASCADE_DO_ROUGH_SEARCH
@@ -268,7 +271,7 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
             center.y = cvRound((r.y + nr.y + nr.height*0.5)*scale);
             radius = cvRound((nr.width + nr.height)*0.25*scale);
             circle( img, center, radius, color, 3, 8, 0 );
-        }
+        }*/
     }
     imshow( "result", img );
 }

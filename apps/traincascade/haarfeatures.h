@@ -3,7 +3,7 @@
 
 #include "traincascade_features.h"
 
-#define CV_HAAR_FEATURE_MAX      3
+#define CV_HAAR_FEATURE_MAX      9
 
 #define HFP_NAME "haarFeatureParams"
 class CvHaarFeatureParams : public CvFeatureParams

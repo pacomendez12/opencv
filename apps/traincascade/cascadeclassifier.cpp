@@ -524,7 +524,8 @@ void CvCascadeClassifier::save( const string filename, bool baseFormat )
 
 bool CvCascadeClassifier::load( const string cascadeDirName )
 {
-    FileStorage fs( cascadeDirName + CC_PARAMS_FILENAME, FileStorage::READ );
+	//string fsFileName = 
+    FileStorage fs( cascadeDirName +  CC_PARAMS_FILENAME, FileStorage::READ );
     if ( !fs.isOpened() )
         return false;
     FileNode node = fs.getFirstTopLevelNode();

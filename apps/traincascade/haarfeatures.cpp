@@ -196,6 +196,129 @@ void CvHaarEvaluator::generateFeatures()
                                 x+dx, y+dy, dx  , dy  , +9) );
                         }
                     }
+#if 1
+					// Mis features
+					/////////////////////////////// esquinas ///////////////////////////////////////////
+					// esq sup iz
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x + dx, y, dx * 2, dy, 3,
+							x, y, dx, dy * 3, 4));
+					}
+
+					// Mis features
+					// esq inf iz
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x + dx, y + dy * 2, dx * 2, dy, 3,
+							x, y, dx, dy * 3, 4));
+					}
+
+					// Mis features
+					// esq sup de
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x, y, dx * 2, dy, 3,
+							x + dx * 2, y, dx, dy * 3, 4));
+					}
+
+					// Mis features
+					// esq inf de
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x, y + dy * 2, dx * 2, dy, 3,
+							x + dx * 2, y, dx, dy * 3, 4));
+					}
+
+
+					//vertical
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x, y, dx, dy, 9,
+							x + dx * 2, y + dy * 2, dx, dy, 9));
+					}
+
+					//vertical
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x + dx * 2, y, dx, dy, 9,
+							x, y + dy * 2, dx, dy, 9));
+					}
+
+					// T
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x, y, dx * 3, dy, 4,
+							x + dx, y + dy, dx, dy * 2, 3));
+					}
+
+					// T inv
+					if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x, y + dy * 2, dx * 3, dy, 4,
+							x + dx, y, dx, dy * 2, 3));
+					}
+
+					// Cross
+					/*if ((x + dx * 3 <= winSize.width) && (y + dy * 3 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, -2,
+							x + dx, y, dx, dy * 3, 3,
+							x, y + dy, dx * 3, dy, 3));
+					}*/
+
+					// media curva derecha
+					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, 1,
+							x + dx * 2, y + dy, dx * 2, dy * 2, -4));
+					}
+
+					// media curva izquierda
+					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, 1,
+							x, y + dy, dx * 2, dy * 2, -4));
+					}
+
+					// media curva abajo
+					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, 1,
+							x + dx, y + dy * 2, dx * 2, dy * 2, -4));
+					}
+
+					// media curva arriba
+					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
+					{
+						features.push_back(Feature(offset, false,
+							x, y, dx * 3, dy * 3, 1,
+							x + dx, y, dx * 2, dy * 2, -4));
+					}
+
+#endif
+					/////////////////////////////// fin mis caracteristicas ///////////////////////////////////////////
+
                     if (mode == CvHaarFeatureParams::ALL)
                     {
                         // tilted haar_x2
