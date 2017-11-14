@@ -25,7 +25,7 @@ static void help()
 
 void detectAndDraw( Mat& img, CascadeClassifier& cascade,
                     CascadeClassifier& nestedCascade,
-                    double scale, bool tryflip );
+                    double scale, bool tryflip, bool reDetect = true );
 
 string cascadeName;
 string nestedCascadeName;
@@ -51,6 +51,8 @@ int main( int argc, const char** argv )
         return 0;
     }
     cascadeName = parser.get<string>("cascade");
+	cascadeName = "C:\\Users\\pacomendez\\Documents\\TOG\\Training final\\con Mis features\\40 steps_ 2000 y 1000\\data\\cascade.xml";
+	//cascadeName = "C:\\Users\\pacomendez\\Documents\\TOG\\data\\cascade.xml";
     nestedCascadeName = parser.get<string>("nested-cascade");
     scale = parser.get<double>("scale");
     if (scale < 1)
@@ -79,11 +81,11 @@ int main( int argc, const char** argv )
 	std::cin >> numberfile;
 	inputName += numberfile + ".jpg";*/
 
-	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video1.mp4";
+	inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video1.mp4";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video2.mp4";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video3.mp4";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video4.mp4";
-	inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video5.mp4";
+	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\video5.mp4";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img0.pgm";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img1.jpg";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img2.jpg";
@@ -100,6 +102,8 @@ int main( int argc, const char** argv )
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img13.jpg";
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img14.jpg"; //falla
 	//inputName = "C:\\Users\\pacomendez\\Documents\\TOG\\img15.jpg";
+
+
 
 
 
@@ -128,14 +132,27 @@ int main( int argc, const char** argv )
     {
         cout << "Video capturing has been started ..." << endl;
 
+		int rem = 0;
         for(;;)
         {
             capture >> frame;
             if( frame.empty() )
                 break;
 
-            Mat frame1 = frame.clone();
-            detectAndDraw( frame1, cascade, nestedCascade, scale, tryflip );
+			bool reDetect = false;
+			if (rem == 1)
+			{
+				rem = 0;
+				reDetect = true;
+			}
+			else
+			{
+				rem++;
+			}
+			
+
+            //Mat frame1 = frame.clone();
+            detectAndDraw( frame, cascade, nestedCascade, scale, tryflip, reDetect );
 
             char c = (char)waitKey(10);
             if( c == 27 || c == 'q' || c == 'Q' )
@@ -186,53 +203,67 @@ int main( int argc, const char** argv )
     return 0;
 }
 
+
+vector<Rect> faces, faces2;
+
+const static Scalar colors[] =
+{
+	/*Scalar(255,0,0),
+	Scalar(255,128,0),
+	Scalar(255,255,0),*/
+	Scalar(0,255,0),
+	/*Scalar(0,128,255),
+	Scalar(0,255,255),
+	Scalar(0,0,255),
+	Scalar(255,0,255)*/
+};
+
 void detectAndDraw( Mat& img, CascadeClassifier& cascade,
                     CascadeClassifier& nestedCascade,
-                    double scale, bool tryflip )
+                    double scale, bool tryflip, bool reDetect )
 {
     double t = 0;
-    vector<Rect> faces, faces2;
-    const static Scalar colors[] =
-    {
-        /*Scalar(255,0,0),
-        Scalar(255,128,0),
-        Scalar(255,255,0),*/
-        Scalar(0,255,0),
-        /*Scalar(0,128,255),
-        Scalar(0,255,255),
-        Scalar(0,0,255),
-        Scalar(255,0,255)*/
-    };
-    Mat gray, smallImg;
 
-    cvtColor( img, gray, COLOR_BGR2GRAY );
-    double fx = 1 / scale;
-    resize( gray, smallImg, Size(), fx, fx, INTER_LINEAR );
-    equalizeHist( smallImg, smallImg );
+	if (reDetect)
+	{
 
-    t = (double)getTickCount();
-    cascade.detectMultiScale( smallImg, faces,
-        1.1,3, 0
-        //|CASCADE_FIND_BIGGEST_OBJECT
-        //|CASCADE_DO_ROUGH_SEARCH
-        |CASCADE_SCALE_IMAGE,
-        Size(30, 30) );
-    /*if( tryflip )
-    {
-        flip(smallImg, smallImg, 1);
-        cascade.detectMultiScale( smallImg, faces2,
-                                 1.1, 2, 0
-                                 //|CASCADE_FIND_BIGGEST_OBJECT
-                                 //|CASCADE_DO_ROUGH_SEARCH
-                                 |CASCADE_SCALE_IMAGE,
-                                 Size(30, 30) );
-        for( vector<Rect>::const_iterator r = faces2.begin(); r != faces2.end(); ++r )
-        {
-            faces.push_back(Rect(smallImg.cols - r->x - r->width, r->y, r->width, r->height));
-        }
-    }*/
-    t = (double)getTickCount() - t;
-    printf( "detection time = %g ms, detected %zd objects\n", t*1000/getTickFrequency(), faces.size());
+
+		Mat gray, smallImg;
+
+		faces.clear();
+
+		cvtColor(img, gray, COLOR_BGR2GRAY);
+		double fx = 1 / scale;
+		resize(gray, smallImg, Size(/*gray.cols / 2, gray. rows / 2*/), fx, fx, INTER_LINEAR);
+		equalizeHist(smallImg, smallImg);
+
+		t = (double)getTickCount();
+		cascade.detectMultiScale(smallImg, faces,
+			1.2, 2, 0
+			| CASCADE_FIND_BIGGEST_OBJECT
+			| CASCADE_DO_ROUGH_SEARCH
+			,//| CASCADE_SCALE_IMAGE,
+			Size(60, 60));
+		/*if( tryflip )
+		{
+			flip(smallImg, smallImg, 1);
+			cascade.detectMultiScale( smallImg, faces2,
+									 1.1, 2, 0
+									 //|CASCADE_FIND_BIGGEST_OBJECT
+									 //|CASCADE_DO_ROUGH_SEARCH
+									 |CASCADE_SCALE_IMAGE,
+									 Size(30, 30) );
+			for( vector<Rect>::const_iterator r = faces2.begin(); r != faces2.end(); ++r )
+			{
+				faces.push_back(Rect(smallImg.cols - r->x - r->width, r->y, r->width, r->height));
+			}
+		}*/
+		t = (double)getTickCount() - t;
+		printf("detection time = %g ms, detected %zd objects\n", t * 1000 / getTickFrequency(), faces.size());
+
+	}
+
+
     for ( size_t i = 0; i < faces.size(); i++ )
     {
         Rect r = faces[i];
@@ -254,9 +285,9 @@ void detectAndDraw( Mat& img, CascadeClassifier& cascade,
             rectangle( img, cvPoint(cvRound(r.x*scale), cvRound(r.y*scale)),
                        cvPoint(cvRound((r.x + r.width-1)*scale), cvRound((r.y + r.height-1)*scale)),
                        color, 3, 8, 0);
-        if( nestedCascade.empty() )
-            continue;
-        smallImgROI = smallImg( r );
+        /*if( nestedCascade.empty() )
+            continue;*/
+        //smallImgROI = smallImg( r );
         /*nestedCascade.detectMultiScale( smallImgROI, nestedObjects,
             1.1, 2, 0
             //|CASCADE_FIND_BIGGEST_OBJECT

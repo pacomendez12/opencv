@@ -196,7 +196,7 @@ void CvHaarEvaluator::generateFeatures()
                                 x+dx, y+dy, dx  , dy  , +9) );
                         }
                     }
-#if 1
+#if 0
 					// Mis features
 					/////////////////////////////// esquinas ///////////////////////////////////////////
 					// esq sup iz
@@ -288,7 +288,7 @@ void CvHaarEvaluator::generateFeatures()
 					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
 					{
 						features.push_back(Feature(offset, false,
-							x, y, dx * 3, dy * 3, 1,
+							x, y, dx * 4, dy * 4, 1,
 							x + dx * 2, y + dy, dx * 2, dy * 2, -4));
 					}
 
@@ -296,7 +296,7 @@ void CvHaarEvaluator::generateFeatures()
 					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
 					{
 						features.push_back(Feature(offset, false,
-							x, y, dx * 3, dy * 3, 1,
+							x, y, dx * 4, dy * 4, 1,
 							x, y + dy, dx * 2, dy * 2, -4));
 					}
 
@@ -304,7 +304,7 @@ void CvHaarEvaluator::generateFeatures()
 					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
 					{
 						features.push_back(Feature(offset, false,
-							x, y, dx * 3, dy * 3, 1,
+							x, y, dx * 4, dy * 4, 1,
 							x + dx, y + dy * 2, dx * 2, dy * 2, -4));
 					}
 
@@ -312,7 +312,7 @@ void CvHaarEvaluator::generateFeatures()
 					if ((x + dx * 4 <= winSize.width) && (y + dy * 4 <= winSize.height))
 					{
 						features.push_back(Feature(offset, false,
-							x, y, dx * 3, dy * 3, 1,
+							x, y, dx * 4, dy * 4, 1,
 							x + dx, y, dx * 2, dy * 2, -4));
 					}
 
